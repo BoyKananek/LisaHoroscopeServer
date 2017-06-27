@@ -233,8 +233,10 @@ router.post("/horoscope/:sign", function (req, res) {
             var work = content[2].replace(/<\/?[^>]+(>|$)/g, ""); // remove html tag from work
             var finance = content[4].replace(/<\/?[^>]+(>|$)/g, ""); // remove html tag from finance
             var love = content[6].replace(/<\/?[^>]+(>|$)/g, "");// remove html tag from love
-            var healthy = content[8].replace(/<\/?[^>]+(>|$)/g, ""); //remove html tag from healthy
-            var luck = content[10].replace(/<\/?[^>]+(>|$)/g, ""); // remove html tag from luck
+            //8->9
+            var healthy = content[9].replace(/<\/?[^>]+(>|$)/g, ""); //remove html tag from healthy
+            //10->11
+            var luck = content[11].replace(/<\/?[^>]+(>|$)/g, ""); // remove html tag from luck
             resp = {
                 "title": title,
                 "work": work,

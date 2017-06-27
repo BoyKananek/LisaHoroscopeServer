@@ -20,12 +20,12 @@ var Session = require('../models/session');
 
 ////////// remove user pass //// 
 var smtpTransport = nodemailer.createTransport(
-    {
+    {   
         host: 'smtp.mandrillapp.com',
         port: 587,
         secure: false,
         auth: {
-           //
+        //
         }
     }
 );
