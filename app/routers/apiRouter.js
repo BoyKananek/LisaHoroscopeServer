@@ -12,7 +12,7 @@ var TempUser = require('../models/tempuser');
 var RequestNewPassword = require('../models/request');
 var config = require('../../config/database');
 var Session = require('../models/session');
-
+var request = require('request');
 //setup the gmail config
 
 //send email with mail mandrillapp
@@ -490,6 +490,85 @@ router.post('/loginfb', function (req, res) {
             });
 
 
+        }
+    });
+});
+
+/////////////////////////////////////////// Horoscope Zodiac //////////////////////////////////////////////
+router.get("/horoscope/:sign", function (req, res) {
+    var resp = {};
+    var id;
+    if (req.params.sign == 'aries') {
+        id = 18286;
+    }
+    else if (req.params.sign == 'taurus') {
+        id = 18288;
+    }
+    else if (req.params.sign == 'gemini') {
+        id = 18289;
+    }
+    else if (req.params.sign == 'cancer') {
+        id = 18290;
+    }
+    else if (req.params.sign == 'leo') {
+        id = 18291;
+    }
+    else if (req.params.sign == 'virgo') {
+        id = 18292;
+    }
+    else if (req.params.sign == 'libra') {
+        id = 18293;
+    }
+    else if (req.params.sign == 'scorpio') {
+        id = 18294;
+    }
+    else if (req.params.sign == 'sagittarius') {
+        id = 18295;
+    }
+    else if (req.params.sign == 'capricorn') {
+        id = 18297;
+    }
+    else if (req.params.sign == 'aquarius') {
+        id = 18298;
+    }
+    else if (req.params.sign == 'pisces') {
+        id = 18299;
+    }
+
+    request.get('https://lisaguru.com/api/get_post/?id=' + id, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            var info = JSON.parse(body); //parse string to json 
+            var wholecontent = info.post['content'];
+            var temp = wholecontent.split('</aside>'); //remove share content 
+            var content = temp[1].split('-->'); // remove comment   tags
+            var content = content[1]; //content
+            var content = content.split('\n'); // separate each cat by enter
+            if(content.length == 13){
+                var title = content[0].replace(/<\/?[^>]+(>|$)/g, ""); // remove html tag from title
+                var work = content[2].replace(/<\/?[^>]+(>|$)/g, ""); // remove html tag from work
+                var finance = content[4].replace(/<\/?[^>]+(>|$)/g, ""); // remove html tag from finance
+                var love = content[6].replace(/<\/?[^>]+(>|$)/g, "");// remove html tag from love
+                var healthy = content[9].replace(/<\/?[^>]+(>|$)/g, ""); //remove html tag from healthy
+                var luck = content[11].replace(/<\/?[^>]+(>|$)/g, ""); // remove html tag from luck
+            }else {
+                var title = content[0].replace(/<\/?[^>]+(>|$)/g, ""); // remove html tag from title
+                var work = content[3].replace(/<\/?[^>]+(>|$)/g, ""); // remove html tag from work
+                var finance = content[5].replace(/<\/?[^>]+(>|$)/g, ""); // remove html tag from finance
+                var love = content[7].replace(/<\/?[^>]+(>|$)/g, "");// remove html tag from love
+                var healthy = content[10].replace(/<\/?[^>]+(>|$)/g, ""); //remove html tag from healthy
+                var luck = content[12].replace(/<\/?[^>]+(>|$)/g, ""); // remove html tag from luck
+            }
+            resp = {
+                "title": title,
+                "work": work,
+                "finance": finance,
+                "love": love,
+                "healthy": healthy,
+                "luck": luck
+            }
+            res.json(resp);
+        } else {
+            res.json({ error: true, message: 'Something went wrong, Please try again' });
         }
     });
 });
